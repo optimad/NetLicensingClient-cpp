@@ -267,9 +267,9 @@ namespace netlicensing {
       if (!escape_string(validationParameters.getLicenseeName()).empty()) {
         params.push_back(std::make_pair(PROP_LICENSEE_NAME, escape_string(validationParameters.getLicenseeName())));
       }
-      if (!escape_string(validationParameters.getLicenseeSecret()).empty()) {
-        params.push_back(std::make_pair(PROP_LICENSEE_SECRET, escape_string(validationParameters.getLicenseeSecret())));
-      }
+//      if (!escape_string(validationParameters.getLicenseeSecret()).empty()) {
+//        params.push_back(std::make_pair(PROP_LICENSEE_SECRET, escape_string(validationParameters.getLicenseeSecret())));
+//      }
 
       int paramIt = 0;
       for(auto const &ent1 : validationParameters.getParameters()) {
