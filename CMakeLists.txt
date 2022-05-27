@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 2.6)
 project(netlicensing)
 
-option (BUILD_TESTS "Build unit tests." FALSE)
+option(BUILD_SHARED_LIBS "Compile Shared Netlicensing-Client " FALSE)
+set (BUILD_TESTS OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-#find_package(JsonCpp REQUIRED)
+set(NETLICENSE_CURL_DIR "" CACHE PATH "path to custom curl distro required by Netlicensing-cpp")
+if(NETLICENSE_CURL_DIR)
+    list(APPEND CMAKE_PREFIX_PATH "${NETLICENSE_CURL_DIR}")
+endif()
+
 find_package(CURL REQUIRED)
 
 if (BUILD_TESTS)
@@ -18,8 +23,6 @@ include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIRS})
 
 set(LIBS ${LIBS} ${CURL_LIBRARIES} ${JSONCPP_LIBRARIES})
-
-set(BUILD_SHARED_LIBS OFF)
 
 add_definitions(-DCURL_STATICLIB)
 if(UNIX)
@@ -34,11 +37,25 @@ file(GLOB sources src/*.cc)
 add_library(netlicensing ${headers} ${sources})
 target_link_libraries(netlicensing ${LIBS})
 
+# Install target
+#
+# On Windows, redist dll libraries have to be installed in the binary directory.
+if (WIN32)
+    install(TARGETS netlicensing ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
+else()
+    install(TARGETS netlicensing DESTINATION lib)
+endif()
+
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/netlicensing" DESTINATION include)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/json" DESTINATION include)
+
 # demo client 
 file(GLOB client_demo_headers client_demo/${db2lp_component}/*h)
 file(GLOB client_demo_sources client_demo/${db2lp_component}/*cc)
 add_executable(netlicensing-client-demo ${client_demo_headers} ${client_demo_sources} )
 target_link_libraries(netlicensing-client-demo netlicensing ${LIBS})
+
+install(TARGETS netlicensing-client-demo DESTINATION bin)
 
 if (BUILD_TESTS)
     include_directories(${Boost_INCLUDE_DIR} )
@@ -51,4 +68,5 @@ if (BUILD_TESTS)
     target_link_libraries(run_tests netlicensing ${LIBS})
     TARGET_LINK_LIBRARIES(run_tests ${Boost_LIBRARIES})
 endif()
+
 
