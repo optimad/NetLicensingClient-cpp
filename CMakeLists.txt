@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.6)
 project(netlicensing)
 
 option(BUILD_SHARED_LIBS "Compile Shared Netlicensing-Client " FALSE)
 set (BUILD_TESTS OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+find_package(OpenSSL REQUIRED)
 
 set(NETLICENSE_CURL_DIR "" CACHE PATH "path to custom curl distro required by Netlicensing-cpp")
 if(NETLICENSE_CURL_DIR)
@@ -36,6 +38,8 @@ file(GLOB sources src/*.cc)
 
 add_library(netlicensing ${headers} ${sources})
 target_link_libraries(netlicensing ${LIBS})
+
+target_link_libraries(netlicensing CURL::libcurl)
 
 # Install target
 #
