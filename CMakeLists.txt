@@ -36,6 +36,16 @@ file(GLOB headers include/netlicensing/*.h)
 source_group(include FILES ${headers})
 file(GLOB sources src/*.cc)
 
+
+# ------------------------------------------------------------------------------------#
+# Set RPATH of installed targets to lib directory in installation folder
+# ------------------------------------------------------------------------------------#
+SET(CMAKE_SKIP_BUILD_RPATH FALSE)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+
 add_library(netlicensing ${headers} ${sources})
 target_link_libraries(netlicensing ${LIBS})
 
@@ -72,5 +82,8 @@ if (BUILD_TESTS)
     target_link_libraries(run_tests netlicensing ${LIBS})
     TARGET_LINK_LIBRARIES(run_tests ${Boost_LIBRARIES})
 endif()
+
+
+
 
 
