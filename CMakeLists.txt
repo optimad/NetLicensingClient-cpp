@@ -20,6 +20,11 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CURL_INCLUDE_DIRS})
+
+# jsoncpp
+find_package(Jsoncpp REQUIRED)
+#target_link_libraries(${PROJECT_NAME} PUBLIC Jsoncpp_lib)
+#list(APPEND INCLUDE_DIRS_FOR_DYNAMIC_VIEW ${JSONCPP_INCLUDE_DIRS})
 include_directories(${JSONCPP_INCLUDE_DIRS})
 
 set(LIBS ${LIBS} ${CURL_LIBRARIES} ${JSONCPP_LIBRARIES})
@@ -47,7 +52,7 @@ else()
 endif()
 
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/netlicensing" DESTINATION include)
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/json" DESTINATION include)
+#install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/json" DESTINATION include)
 
 # demo client 
 file(GLOB client_demo_headers client_demo/${db2lp_component}/*h)
