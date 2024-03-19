@@ -13,6 +13,10 @@ endif()
 
 find_package(CURL REQUIRED)
 
+find_package(jsoncpp REQUIRED)
+set(JSONCPP_LIBRARIES jsoncpp_lib)
+
+
 if (BUILD_TESTS)
 	set(Boost_USE_STATIC_LIBS ON)
     find_package(Boost 1.40 REQUIRED unit_test_framework)    
@@ -47,7 +51,6 @@ else()
 endif()
 
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/netlicensing" DESTINATION include)
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/json" DESTINATION include)
 
 # demo client 
 file(GLOB client_demo_headers client_demo/${db2lp_component}/*h)
