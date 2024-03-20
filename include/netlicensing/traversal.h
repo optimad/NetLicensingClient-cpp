@@ -13,12 +13,12 @@ namespace netlicensing {
       return;
     }
     // extract properties from current item
-    const Json::Value& props = (*item)["property"];
+    Json::Value& props = (*item)["property"];
     for (Json::ValueIterator prop = props.begin(); prop != props.end(); ++prop) {
       currentItem->addProperty((*prop)["name"].asString(), (*prop)["value"].asString());
     }
     // unwind lists recursively
-    const Json::Value& list = (*item)["list"];
+    Json::Value& list = (*item)["list"];
     if (!list.isNull()) {
       for (Json::ValueIterator entry = list.begin(); entry != list.end(); ++entry) {
         ItemWrapper::Ptr_t nestedItem = currentItem->createNested();
@@ -38,7 +38,7 @@ namespace netlicensing {
     bool parsingSuccessful = reader.parse(source.c_str(), root);
     if (parsingSuccessful) {
       // parse info stucture
-      const Json::Value& infos = root["infos"]["info"];
+      Json::Value& infos = root["infos"]["info"];
       if (!infos.isNull()) {
         for (Json::ValueIterator info = infos.begin(); info != infos.end(); ++info) {
           mapper.addInfo((*info)["id"].asString(), (*info)["type"].asString(), (*info)["value"].asString());
@@ -46,7 +46,7 @@ namespace netlicensing {
       }
 
       // get top level element of structure
-      const Json::Value& items = root["items"]["item"];
+      Json::Value& items = root["items"]["item"];
       if (!items.isNull()) {
         for (Json::ValueIterator item = items.begin(); item != items.end(); ++item) {
           ItemWrapper::Ptr_t resultItem = mapper.createItem((*item)["type"].asString());
